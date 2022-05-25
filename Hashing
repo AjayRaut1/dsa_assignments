@@ -1,0 +1,147 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct node {
+    int value;
+    node* next;
+}*HashTable[10];
+
+class hashing{
+    public:
+    hashing(){
+        for(int i =0 ; i < 10 ;i++){
+            HashTable[i]=NULL;
+        }
+    }
+
+    int HashFunction(int key) {
+        return (key%10);
+    }
+
+    node* createNode(int key);
+    void searching(int key);
+    void deletion(int key);
+    void insertion(int key);
+    void display();
+};
+
+node* hashing:: createNode(int key) {
+    node* temp = new node;
+    temp -> value = key;
+    temp -> next = NULL;
+    return temp;
+}
+
+void hashing::searching(int key){
+    int hash_key = HashFunction(key);
+    node* temp = HashTable[hash_key];
+
+    while(temp != NULL) {
+        if(temp->value == key) {
+            cout<<"Element found at index : "<<hash_key<<endl;
+            return;
+        }
+        else if (temp->next == NULL){
+            cout<<"Element not present"<<endl;
+            return;
+        }
+        temp = temp->next;
+    }
+    cout<<"Element not found";
+    return;
+}
+
+void hashing::deletion(int key) {
+    int hash_key = HashFunction(key);
+    node* temp = HashTable[hash_key];
+    while(temp != NULL) {
+        if(temp->value == key) {
+            HashTable[hash_key] = temp->next;
+            cout<<"Element deleted successfully"<<endl;
+            return;
+        }
+        else if(temp->next->value == key) {
+            temp->next = temp->next->next;
+            cout<<"Element deleted successfully"<<endl;
+            return;
+        }
+        temp = temp->next;
+    }
+    cout<<"Element is not present";
+    return;
+}
+
+void hashing::insertion(int key) {
+    int hash_key = HashFunction(key);
+    node* temp = HashTable[hash_key];
+
+    while(temp != NULL){
+        if(temp->next == NULL){
+            temp->next = createNode(key);
+            cout<<"Element inserted successfully"<<endl;
+            return;
+        }
+        temp = temp -> next;
+    }
+
+    HashTable[hash_key] = createNode(key);
+    cout<<"Element inserted successfully"<<endl;
+    return;
+}
+
+void hashing::display() {
+    for(int i = 0; i < 10 ; i++) {
+        node* temp=HashTable[i];
+        cout<<"a["<<i<<"] : ";
+
+        while(temp != NULL) {
+            cout<<" -> "<<temp->value;
+            temp = temp->next;
+        }
+        cout<<endl;
+    }
+}
+
+int main(){
+    hashing h;
+    do
+    {   
+        cout<<"----Hashing with chaining without replacement----"<<endl;
+        cout<<"\t1.Insetion"<<endl;
+        cout<<"\t2.Deletion"<<endl;
+        cout<<"\t3.Searching"<<endl;
+        cout<<"\t4.Display"<<endl;
+        cout<<"\t5.Exit"<<endl;
+        cout<<"Enter Your choice : "<<endl;
+        int ch,ins,del,ser;
+        cin>>ch;
+        switch(ch){
+            case 1:
+                cout<<"Enter the key to be inserted : ";
+                cin>>ins;
+                h.insertion(ins);
+                break;
+            case 2:
+                cout<<"Enter the key to be deleted : ";
+                cin>>del;
+                h.deletion(del);
+                break;
+            case 3:
+                cout<<"Enter the key to be searched : ";
+                cin>>ser;
+                h.searching(ser);
+                break;
+            case 4: 
+                h.display();
+                break;
+            case 5:
+                return 0;
+
+            default:
+                cout<<"Enter valid choice : ";
+                break;
+        }
+    } while (1);
+    
+    return 0;
+}
